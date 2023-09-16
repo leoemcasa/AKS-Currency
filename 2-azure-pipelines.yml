@@ -1,0 +1,84 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+- stage: Build
+  jobs:
+  - job: primeiroJob
+    steps:
+    - bash: echo ############################
+    - bash: echo Primeiro Job do Build
+    - bash: echo ############################
+    - bash: echo # pipelineLevelVariable # é:
+    - bash: echo $(pipelineLevelVariable)
+    - bash: echo ## BuildNumber ## é:
+    - bash: echo $(Build.BuildNumber)
+    - bash: echo ## BuildNumber ## é:
+  - job: segundoJob
+    steps:
+    - bash: echo ############################
+    - bash: echo Segundo Job do Build
+    - bash: echo ############################
+    - bash: echo ## BuildId ## é:
+    - bash: echo $(Build.BuildId)
+    - bash: echo ############################
+    - bash: echo #### SourceBranchName #### é:
+    - bash: echo $(Build.SourceBranchName)
+
+- stage: deployDSV
+  variables:
+    environment: DSV
+  dependsOn: Build
+  jobs:
+  - job: deployDSVjob
+    steps:
+    - bash: echo ############################
+    - bash: echo Deploy em DSV
+    - bash: echo ############################
+    - bash: echo #### Environment #### é:
+    - bash: echo $(environment) deploy job
+    - bash: echo ## Build.SouceDirectoru ## é:
+    - bash: echo $(Build.SourceDirectory)
+    - bash: echo # DefaultWorkingDirectory # é:
+    - bash: echo $(System.DefaultWorkingDirectory)
+
+- stage: deployHMG
+  variables:
+    environment: HMG
+  dependsOn: Build
+  jobs:
+  - job: deployHMGjob
+    steps:
+    - bash: echo ############################
+    - bash: echo Deploy em HMG
+    - bash: echo ############################
+    - bash: echo #### Versão JAVA #### é:
+    - bash: java -version
+    - bash: echo #### Versão MAVEN ### é:
+    - bash: mvn -version
+    - bash: echo #### Versão NODE #### é:
+    - bash: node --version
+    - bash: echo ### Versão PYTHON ### é:
+    - bash: python --version
+
+- stage: deployPRD
+  variables:
+    environment: PRD
+  dependsOn: deployHMG
+  jobs:
+  - job: deployPRDjob
+    steps:
+    - bash: echo ############################
+    - bash: echo Deploy em PRD
+    - bash: echo ############################
+    - bash: echo # ls de DefaultWorkingDirectory # é:
+    - bash: ls -R $(System.DefaultWorkingDirectory)
+    - bash: echo ### ArtifactStagingDirectory ### é:
+    - bash: echo $(Build.ArtifactStagingDirectory)
+    - bash: echo # ls de ArtifactStagingDirectory # é:
+    - bash: ls -R $(Build.ArtifactStagingDirectory)
+    
