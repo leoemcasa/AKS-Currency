@@ -30,8 +30,6 @@ stages:
     - bash: echo $(Build.SourceBranchName)
 
 - stage: deployDSV
-  variables:
-    environment: DSV
   dependsOn: Build
   jobs:
   - job: deployDSVjob
@@ -45,10 +43,10 @@ stages:
     - bash: echo $(Build.SourceDirectory)
     - bash: echo # DefaultWorkingDirectory # é:
     - bash: echo $(System.DefaultWorkingDirectory)
+  - deployment: DSVdeploy
+    environment: DSV
 
 - stage: deployHMG
-  variables:
-    environment: HMG
   dependsOn: Build
   jobs:
   - job: deployHMGjob
@@ -64,10 +62,10 @@ stages:
     - bash: node --version
     - bash: echo ### Versão PYTHON ### é:
     - bash: python --version
+  - deployment: HMGdeploy
+    environment: HMG
 
 - stage: deployPRD
-  variables:
-    environment: PRD
   dependsOn: deployHMG
   jobs:
   - job: deployPRDjob
@@ -81,4 +79,6 @@ stages:
     - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: echo # ls de ArtifactStagingDirectory # é:
     - bash: ls -R $(Build.ArtifactStagingDirectory)
+  - deployment: PRDdeploy
+    environment: PRD
     
