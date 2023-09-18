@@ -11,36 +11,30 @@ stages:
   - job: primeiroJob
     steps:
     - bash: echo Primeiro Job do Build
-      displayName: "pipelineLevelVariable"
     - bash: echo $(pipelineLevelVariable)
-    - bash: echo ## BuildNumber ## é:
+      displayName: "echo pipelineLevelVariable"
     - bash: echo $(Build.BuildNumber)
-    - bash: echo ## BuildNumber ## é:
+      displayName: "echo BuildNumber"
   - job: segundoJob
     steps:
-    - bash: echo ############################
     - bash: echo Segundo Job do Build
-    - bash: echo ############################
-    - bash: echo ## BuildId ## é:
     - bash: echo $(Build.BuildId)
-    - bash: echo ############################
-    - bash: echo #### SourceBranchName #### é:
+      displayName: "echo buildId"
     - bash: echo $(Build.SourceBranchName)
+      displayName: "echo SourceBranch"
 
 - stage: deployDSV
   dependsOn: Build
   jobs:
   - job: deployDSVjob
     steps:
-    - bash: echo ############################
     - bash: echo Deploy em DSV
-    - bash: echo ############################
-    - bash: echo #### Environment #### é:
     - bash: echo $(environment) deploy job
-    - bash: echo ## Build.SouceDirectoru ## é:
+      displayName: "echo environmentVar"
     - bash: echo $(Build.SourceDirectory)
-    - bash: echo # DefaultWorkingDirectory # é:
+      displayName: "echo SourceDIrectory"
     - bash: echo $(System.DefaultWorkingDirectory)
+      displayName: "echo workingDirectory"
   - deployment: DSVdeploy
     environment: DSV
 
@@ -49,17 +43,15 @@ stages:
   jobs:
   - job: deployHMGjob
     steps:
-    - bash: echo ############################
     - bash: echo Deploy em HMG
-    - bash: echo ############################
-    - bash: echo #### Versão JAVA #### é:
     - bash: java -version
-    - bash: echo #### Versão MAVEN ### é:
+      displayName: "Versão Java"
     - bash: mvn -version
-    - bash: echo #### Versão NODE #### é:
+      displayName: "Versão Maven"
     - bash: node --version
-    - bash: echo ### Versão PYTHON ### é:
+      displayName: "Versão Node"
     - bash: python --version
+      displayName: "Versão Python"
   - deployment: HMGdeploy
     environment: HMG
 
@@ -68,15 +60,13 @@ stages:
   jobs:
   - job: deployPRDjob
     steps:
-    - bash: echo ############################
     - bash: echo Deploy em PRD
-    - bash: echo ############################
-    - bash: echo # ls de DefaultWorkingDirectory # é:
     - bash: ls -R $(System.DefaultWorkingDirectory)
-    - bash: echo ### ArtifactStagingDirectory ### é:
+      displayName: "echo WorkingDirectory"
     - bash: echo $(Build.ArtifactStagingDirectory)
-    - bash: echo # ls de ArtifactStagingDirectory # é:
+      displayName: "echo artifactStagingDirectory"
     - bash: ls -R $(Build.ArtifactStagingDirectory)
+      displayName: "list stagingDirectory"
   - deployment: PRDdeploy
     environment: PRD
     
