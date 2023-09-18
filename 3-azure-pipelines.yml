@@ -24,7 +24,7 @@ stages:
     steps:
     - task: Docker@2
       inputs:
-        containerRegistry: 'dockerHubRegistry'
+        containerRegistry: 'leoDockerHub'
         repository: 'leoemcasa/currency-exchange-devops'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
