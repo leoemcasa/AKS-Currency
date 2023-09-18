@@ -10,10 +10,8 @@ stages:
   jobs:
   - job: primeiroJob
     steps:
-    - bash: echo ############################
     - bash: echo Primeiro Job do Build
-    - bash: echo ############################
-    - bash: echo # pipelineLevelVariable # é:
+      displayName: "pipelineLevelVariable"
     - bash: echo $(pipelineLevelVariable)
     - bash: echo ## BuildNumber ## é:
     - bash: echo $(Build.BuildNumber)
